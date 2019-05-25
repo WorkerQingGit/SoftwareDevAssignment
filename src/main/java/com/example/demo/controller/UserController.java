@@ -1,6 +1,8 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.User;
+import com.example.demo.mapper.UserMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,6 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 
 @Controller
 public class UserController {
+    @Autowired
+    UserMapper userMapper;
     @RequestMapping("/login")
     public String Login(HttpServletRequest request,String code) {
         String session = request.getSession().getId();
@@ -23,5 +27,12 @@ public class UserController {
         //首次登录则向数据库中写入openid
         //生成session并返回
         return session;
+    }
+
+    @RequestMapping("/test")
+    @ResponseBody
+    public String test(){
+        String test = userMapper.sqlTest();
+        return "test";
     }
 }
