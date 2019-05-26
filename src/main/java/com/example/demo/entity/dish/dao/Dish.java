@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 
 @Entity
 @Data
-public class DishDAO {
+public class Dish {
 
     @Id
     private Integer dishId;

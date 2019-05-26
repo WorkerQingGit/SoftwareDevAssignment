@@ -1,6 +1,6 @@
-package com.example.demo.entity.Order.dto;
+package com.example.demo.entity.order.dto;
 
-import com.example.demo.entity.Order.dao.OrderDetailDAO;
+import com.example.demo.entity.order.dao.OrderDetail;
 import com.example.demo.enums.OrderStatusEnums;
 import com.example.demo.enums.PayStatusEnums;
 import lombok.Data;
@@ -35,5 +35,5 @@ public class OrderDTO {
     //    pay_status TINYINT (3) NOT NULL DEFAULT '0' COMMENT '支付状态，默认0是未支付',
     private int payStatus = PayStatusEnums.PAY_NOT_PAY.getCode();
 
-    private List<OrderDetailDAO> orderDetailDAOList;
+    private List<OrderDetail> orderDetailList;
 }

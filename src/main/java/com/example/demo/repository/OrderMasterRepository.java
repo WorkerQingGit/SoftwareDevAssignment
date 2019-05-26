@@ -1,11 +1,11 @@
 package com.example.demo.repository;
 
-import com.example.demo.entity.Order.dao.OrderMasterDAO;
+import com.example.demo.entity.order.dao.OrderMaster;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface OrderMasterRepository extends JpaRepository<OrderMasterDAO,String> {
+public interface OrderMasterRepository extends JpaRepository<OrderMaster,String> {
 
-    Page<OrderMasterDAO> findByUserOpenid(String buyerOpenid, Pageable pageable);
+    Page<OrderMaster> findByUserOpenid(String buyerOpenid, Pageable pageable);
 }

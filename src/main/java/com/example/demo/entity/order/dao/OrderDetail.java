@@ -1,4 +1,4 @@
-package com.example.demo.entity.Order.dao;
+package com.example.demo.entity.order.dao;
 
 import lombok.Data;
 
@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 
 @Entity
 @Data
-public class OrderDetailDAO {
+public class OrderDetail {
 
 //    detail_id VARCHAR (32) NOT NULL,
     @Id

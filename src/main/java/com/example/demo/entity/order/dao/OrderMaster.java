@@ -1,4 +1,4 @@
-package com.example.demo.entity.Order.dao;
+package com.example.demo.entity.order.dao;
 
 import com.example.demo.enums.OrderStatusEnums;
 import com.example.demo.enums.PayStatusEnums;
@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 
 @Entity
 @Data
-public class OrderMasterDAO {
+public class OrderMaster {
 
 
 //    order_id VARCHAR (32) NOT NULL,

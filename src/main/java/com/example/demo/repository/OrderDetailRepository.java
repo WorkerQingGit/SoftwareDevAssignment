@@ -1,11 +1,11 @@
 package com.example.demo.repository;
 
-import com.example.demo.entity.Order.dao.OrderDetailDAO;
+import com.example.demo.entity.order.dao.OrderDetail;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface OrderDetailRepository extends JpaRepository<OrderDetailDAO,String> {
+public interface OrderDetailRepository extends JpaRepository<OrderDetail,String> {
 
-    List<OrderDetailDAO> findByOrderId(String OrderId);
+    List<OrderDetail> findByOrderId(String OrderId);
 }

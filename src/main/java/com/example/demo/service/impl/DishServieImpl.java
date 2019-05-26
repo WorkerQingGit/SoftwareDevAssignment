@@ -1,36 +1,38 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.entity.dish.dao.DishDAO;
+import com.example.demo.entity.dish.dao.Dish;
 import com.example.demo.repository.DishRepository;
 import com.example.demo.service.DishService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class DishServieImpl implements DishService {
 
     @Autowired
     private DishRepository repository;
 
     @Override
-    public DishDAO findOne(String dishId) {
+    public Dish findOne(String dishId) {
         return repository.getOne(dishId);
     }
 
     @Override
-    public List<DishDAO> findUpAll() {
+    public List<Dish> findUpAll() {
         return repository.findAll();
     }
 
     @Override
-    public Page<DishDAO> findAll(Pageable pageable) {
+    public Page<Dish> findAll(Pageable pageable) {
         return repository.findAll(pageable);
     }
 
     @Override
-    public DishDAO save(DishDAO dishDAO) {
-        return repository.save(dishDAO);
+    public Dish save(Dish dish) {
+        return repository.save(dish);
     }
 }

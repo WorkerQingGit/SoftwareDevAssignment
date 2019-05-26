@@ -1,9 +1,9 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.entity.Order.dao.OrderDetailDAO;
-import com.example.demo.entity.Order.dao.OrderMasterDAO;
-import com.example.demo.entity.Order.dto.OrderDTO;
-import com.example.demo.entity.dish.dao.DishDAO;
+import com.example.demo.entity.order.dao.OrderDetail;
+import com.example.demo.entity.order.dao.OrderMaster;
+import com.example.demo.entity.order.dto.OrderDTO;
+import com.example.demo.entity.dish.dao.Dish;
 import com.example.demo.enums.OrderStatusEnums;
 import com.example.demo.enums.PayStatusEnums;
 import com.example.demo.repository.OrderDetailRepository;
@@ -14,16 +14,16 @@ import com.example.demo.utils.KeyUtils;
 import com.example.demo.utils.OrderMAster2OrderDTOConverter;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
-import java.security.Key;
 import java.util.List;
 
+@Service
 public class OrderServiceImpl implements OrderService {
     @Autowired
     private OrderDetailRepository orderDetailRepository;
@@ -41,28 +41,28 @@ public class OrderServiceImpl implements OrderService {
         BigDecimal orderAmount = new BigDecimal(0);
 
         //查询商品
-        for(OrderDetailDAO orderDetailDAO:orderDTO.getOrderDetailDAOList()){
-            DishDAO dishDAO = dishService.findOne(orderDetailDAO.getDishId());
-            if(dishDAO == null) return null;//之后补写异常类
+        for(OrderDetail orderDetail :orderDTO.getOrderDetailList()){
+            Dish dish = dishService.findOne(orderDetail.getDishId());
+            if(dish == null) return null;//之后补写异常类
 
             //计算订单总价
-            orderAmount = dishDAO.getDishPrice().multiply
-                    (new BigDecimal(orderDetailDAO.getDishQuantity()))
+            orderAmount = dish.getDishPrice().multiply
+                    (new BigDecimal(orderDetail.getDishQuantity()))
                     .add(orderAmount);
 
             //订单详情入库
-            BeanUtils.copyProperties(dishDAO,orderDetailDAO);
-            orderDetailDAO.setDetailId(KeyUtils.genUniqueKey());
-            orderDetailDAO.setOrderId(orderId);
-            orderDetailRepository.save(orderDetailDAO);
+            BeanUtils.copyProperties(dish, orderDetail);
+            orderDetail.setDetailId(KeyUtils.genUniqueKey());
+            orderDetail.setOrderId(orderId);
+            orderDetailRepository.save(orderDetail);
         }
 
         //OrderMaster写入数据库
-        OrderMasterDAO orderMasterDAO = new OrderMasterDAO();
-        BeanUtils.copyProperties(orderDTO,orderMasterDAO);
-        orderMasterDAO.setOrderId(orderId);
-        orderMasterDAO.setOrderStatus(OrderStatusEnums.ORDER_NEW.getCode());
-        orderMasterDAO.setPayStatus(PayStatusEnums.PAY_NOT_PAY.getCode());
+        OrderMaster orderMaster = new OrderMaster();
+        BeanUtils.copyProperties(orderDTO, orderMaster);
+        orderMaster.setOrderId(orderId);
+        orderMaster.setOrderStatus(OrderStatusEnums.ORDER_NEW.getCode());
+        orderMaster.setPayStatus(PayStatusEnums.PAY_NOT_PAY.getCode());
 
         return orderDTO;
     }
@@ -70,22 +70,22 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderDTO findOne(String orderId) {
 
-        OrderMasterDAO orderMasterDAO = orderMasterRepository.getOne(orderId);
+        OrderMaster orderMaster = orderMasterRepository.getOne(orderId);
         if(orderId == null) return  null;//补写异常
 
-        List<OrderDetailDAO> orderDetailDAOList = orderDetailRepository.findByOrderId(orderId);
-        if(CollectionUtils.isEmpty(orderDetailDAOList))return null;//补写异常
+        List<OrderDetail> orderDetailList = orderDetailRepository.findByOrderId(orderId);
+        if(CollectionUtils.isEmpty(orderDetailList))return null;//补写异常
 
         OrderDTO orderDTO = new OrderDTO();
-        BeanUtils.copyProperties(orderMasterDAO,orderDTO);
-        orderDTO.setOrderDetailDAOList(orderDetailDAOList);
+        BeanUtils.copyProperties(orderMaster,orderDTO);
+        orderDTO.setOrderDetailList(orderDetailList);
 
         return orderDTO;
     }
 
     @Override
     public Page<OrderDTO> findList(String userId, Pageable pageable) {
-        Page<OrderMasterDAO> orderMasterDAOPage = orderMasterRepository.findByUserOpenid(userId,pageable);
+        Page<OrderMaster> orderMasterDAOPage = orderMasterRepository.findByUserOpenid(userId,pageable);
 
         List<OrderDTO> orderDTOList = OrderMAster2OrderDTOConverter.convert(orderMasterDAOPage);
 
