@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface DishService {
 
-    Dish findOne(String dishId);
+    Dish findOne(Integer dishId);
 
     //返回给前端的列表
     List<Dish> findUpAll();

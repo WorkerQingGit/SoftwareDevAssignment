@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 
 @Service
@@ -17,8 +18,8 @@ public class DishServieImpl implements DishService {
     private DishRepository repository;
 
     @Override
-    public Dish findOne(String dishId) {
-        return repository.getOne(dishId);
+    public Dish findOne(Integer dishId) {
+        return repository.getOne(dishId.toString());
     }
 
     @Override

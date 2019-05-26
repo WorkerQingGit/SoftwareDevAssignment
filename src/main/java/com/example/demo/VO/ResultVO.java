@@ -14,4 +14,12 @@ public class ResultVO<T> {
     //具体内容
     private T data;
 
+    public ResultVO(Integer code, String msg, T data) {
+        this.code = code;
+        this.msg = msg;
+        this.data = data;
+    }
+
+    public ResultVO() {
+    }
 }

@@ -7,7 +7,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class ProductVO {
+public class CanteenVO {
 
     @JsonProperty("name")
     private String canteenName;
@@ -17,4 +17,13 @@ public class ProductVO {
 
     @JsonProperty("food")
     private List<DishVO> dishList;
+
+    public CanteenVO(String canteenName, Integer canteenId, List<DishVO> dishList) {
+        this.canteenName = canteenName;
+        this.canteenId = canteenId;
+        this.dishList = dishList;
+    }
+
+    public CanteenVO() {
+    }
 }
