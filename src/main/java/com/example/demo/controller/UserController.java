@@ -43,4 +43,10 @@ public class UserController {
         InnerUser user = userService.selectAimUser(openid);
         return user;
     }
+    @RequestMapping("/resetData")
+    public InnerUser resetData(HttpServletRequest request,InnerUser user){
+        String session = request.getSession().getId();
+        //todo: resetData
+        return user;
+    }
 }
