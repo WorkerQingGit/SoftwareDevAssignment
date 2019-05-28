@@ -33,9 +33,10 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private DishService dishService;
+
     @Override
     public OrderDTO create(OrderDTO orderDTO) {
-
+        /*
         //随机生成订单号
         String orderId = KeyUtils.genUniqueKey();
         BigDecimal orderAmount = new BigDecimal(0);
@@ -64,6 +65,7 @@ public class OrderServiceImpl implements OrderService {
         orderMaster.setOrderStatus(OrderStatusEnums.ORDER_NEW.getCode());
         orderMaster.setPayStatus(PayStatusEnums.PAY_NOT_PAY.getCode());
 
+        */
         return orderDTO;
     }
 
