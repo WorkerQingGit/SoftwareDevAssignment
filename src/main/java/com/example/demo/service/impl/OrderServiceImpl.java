@@ -5,6 +5,7 @@ import com.example.demo.entity.order.dao.OrderDetail;
 import com.example.demo.entity.order.dao.OrderMaster;
 import com.example.demo.entity.order.dto.OrderDTO;
 import com.example.demo.entity.dish.dao.Dish;
+import com.example.demo.enums.DeliverStatusEnums;
 import com.example.demo.enums.OrderStatusEnums;
 import com.example.demo.enums.PayStatusEnums;
 import com.example.demo.repository.OrderDetailRepository;
@@ -13,6 +14,7 @@ import com.example.demo.service.DishService;
 import com.example.demo.service.OrderService;
 import com.example.demo.utils.KeyUtils;
 import com.example.demo.utils.OrderMAster2OrderDTOConverter;
+import com.example.demo.utils.ResultVOUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -39,7 +41,6 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public OrderDTO create(OrderDTO orderDTO) {
-        /*
         //随机生成订单号
         String orderId = KeyUtils.genUniqueKey();
         BigDecimal orderAmount = new BigDecimal(0);
@@ -69,7 +70,6 @@ public class OrderServiceImpl implements OrderService {
         orderMaster.setOrderStatus(OrderStatusEnums.ORDER_NEW.getCode());
         orderMaster.setPayStatus(PayStatusEnums.PAY_NOT_PAY.getCode());
 
-        */
         return orderDTO;
     }
 
@@ -167,4 +167,22 @@ public class OrderServiceImpl implements OrderService {
 
         return orderDTO;
     }
+
+    @Override
+    @Transactional
+    public OrderDTO pick(OrderDTO orderDTO, String pickmanOpenId) {
+        if(orderDTO.getDeliverStatus()!= DeliverStatusEnums.DELIVER_NOT_ON_ROAD.getCode())return null;
+
+        orderDTO.setDeliverStatus(DeliverStatusEnums.DELIVER_ON_ROAD.getCode());
+        orderDTO.setPickmanOpenid(pickmanOpenId);
+        OrderMaster orderMaster = new OrderMaster();
+        BeanUtils.copyProperties(orderDTO,orderMaster);
+        OrderMaster updateResult = orderMasterRepository.save(orderMaster);
+        if(updateResult == null)return null;
+
+        return orderDTO;
+
+    }
+
+
 }

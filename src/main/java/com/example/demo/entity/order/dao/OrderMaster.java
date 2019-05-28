@@ -1,5 +1,6 @@
 package com.example.demo.entity.order.dao;
 
+import com.example.demo.enums.DeliverStatusEnums;
 import com.example.demo.enums.OrderStatusEnums;
 import com.example.demo.enums.PayStatusEnums;
 import lombok.Data;
@@ -38,5 +39,10 @@ public class OrderMaster {
 //    pay_status TINYINT (3) NOT NULL DEFAULT '0' COMMENT '支付状态，默认0是未支付',
     private int payStatus = PayStatusEnums.PAY_NOT_PAY.getCode();
 
+    //运送状态，初始为未在运送
+    private int deliverStatus = DeliverStatusEnums.DELIVER_NOT_ON_ROAD.getCode();
+
+    //接单人，初始为空
+    private String pickmanOpenid = null;
 
 }

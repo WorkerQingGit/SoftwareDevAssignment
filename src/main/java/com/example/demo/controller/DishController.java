@@ -8,6 +8,7 @@ import com.example.demo.entity.canteen.dao.Canteen;
 import com.example.demo.entity.dish.dao.Dish;
 import com.example.demo.service.CanteenService;
 import com.example.demo.service.DishService;
+import com.example.demo.utils.ResultVOUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,34 +33,33 @@ public class DishController {
 
         List<Canteen> canteenList = canteenService.findAll();
 
-        if(canteenList == null)return new ResultVO(-1,"ERROR",null);
+        if(canteenList == null)return ResultVOUtil.error(-1,"failed");
 
-        ResultVO resultVO = new ResultVO(0,"餐厅列表",canteenList);
-
-        return resultVO;
+        return ResultVOUtil.success(canteenList);
     }
 
     //获取某个餐厅信息
     @RequestMapping("/getCanteen")
-    public ResultVO getCanteen(Integer canteenId){
+    public ResultVO getCanteen(String canteenId){
 
         Canteen canteen = canteenService.findOne(canteenId);
 
-        if(canteen == null) return new ResultVO(-1,"ERROR",null);
+        CanteenVO canteenVO = new CanteenVO();
+        BeanUtils.copyProperties(canteen,canteenVO);
 
-        ResultVO resultVO = new ResultVO(1,"餐厅详情",canteen);
+        if(canteen == null) return ResultVOUtil.error(-1,"failed");
 
-        return resultVO;
+        return ResultVOUtil.success(canteenVO);
     }
 
     //获取某个食堂下的所有餐品信息
     @RequestMapping("/getDishCanteen")
-    public ResultVO getDishByCanteen(Integer canteenId){
+    public ResultVO getDishByCanteen(String canteenId){
 
         Canteen canteen = canteenService.findOne(canteenId);
 
         List<Dish> dishList = dishService.findUpAll();
-        if(dishList.size()==0)return new ResultVO(-2,"NULL",null);
+        if(dishList.size()==0)return ResultVOUtil.error(-1,"failed");
 
         List<DishVO> result = new ArrayList<>();
         for(Dish dish:dishList){
@@ -70,9 +70,13 @@ public class DishController {
             }
         }
 
-        CanteenVO canteenVO = new CanteenVO(canteen.getCanteenName(),canteen.getCanteenId(), result);
+//        CanteenVO canteenVO = new CanteenVO(canteen.getCanteenName(),canteen.getCanteenId(), result);
+        CanteenVO canteenVO = new CanteenVO();
+        canteenVO.setCanteenId(canteen.getCanteenId());
+        canteenVO.setCanteenName(canteen.getCanteenName());
+        canteenVO.setDishList(result);
 
-        return new ResultVO(2,"餐厅菜品详情",canteenVO);
+        return ResultVOUtil.success(canteenVO);
 
     }
 
@@ -82,8 +86,9 @@ public class DishController {
 
         Dish dish = dishService.findOne(dishId);
 
-        ResultVO resultVO = new ResultVO(3,"指定餐品详情",dish);
+        DishVO dishVO = new DishVO();
+        BeanUtils.copyProperties(dish,dishVO);
 
-        return resultVO;
+        return ResultVOUtil.success(dishVO);
     }
 }

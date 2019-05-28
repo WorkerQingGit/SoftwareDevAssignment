@@ -26,4 +26,7 @@ public interface OrderService {
     //支付订单
     OrderDTO paid(OrderDTO orderDTO);
 
+    //接单
+    OrderDTO pick(OrderDTO orderDTO,String pickmanOpenId);
+
 }

@@ -18,12 +18,4 @@ public class CanteenVO {
     @JsonProperty("food")
     private List<DishVO> dishList;
 
-    public CanteenVO(String canteenName, String canteenId, List<DishVO> dishList) {
-        this.canteenName = canteenName;
-        this.canteenId = canteenId;
-        this.dishList = dishList;
-    }
-
-    public CanteenVO() {
-    }
 }

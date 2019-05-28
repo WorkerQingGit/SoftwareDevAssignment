@@ -1,10 +1,14 @@
 package com.example.demo.controller;
 
 import com.example.demo.VO.ResultVO;
+import com.example.demo.entity.order.dao.OrderMaster;
 import com.example.demo.entity.order.dto.OrderDTO;
+import com.example.demo.enums.OrderStatusEnums;
 import com.example.demo.form.OrderForm;
 import com.example.demo.service.OrderService;
 import com.example.demo.utils.OrderForm2OrderDTOConverter;
+import com.example.demo.utils.ResultVOUtil;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import javax.xml.transform.Result;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,12 +36,12 @@ public class BuyerOrderController {
                                                 BindingResult bindingResult){
 
         if(bindingResult.hasErrors()){
-            return null;//补写错误信息
+            return ResultVOUtil.error(-1,"ERROR");//补写错误信息
         }
 
         OrderDTO orderDTO = OrderForm2OrderDTOConverter.convert(orderForm);
         if(CollectionUtils.isEmpty(orderDTO.getOrderDetailList())){
-            return null;//补写错误
+            return ResultVOUtil.error(-1,"ERROR");//补写错误
         }
 
         OrderDTO createResult = orderService.create(orderDTO);
@@ -44,7 +49,7 @@ public class BuyerOrderController {
         Map<String ,String> map = new HashMap<>();
         map.put("orderId",createResult.getOrderId());
 
-        return new ResultVO(5,"创建订单",map);
+        return ResultVOUtil.success(map);
 
     }
 
@@ -60,7 +65,7 @@ public class BuyerOrderController {
         PageRequest request = new PageRequest(page,size);
         Page<OrderDTO> orderDTOPage = orderService.findList(openid,request);
 
-        return new ResultVO(6,"订单列表",orderDTOPage);
+        return ResultVOUtil.success(orderDTOPage.getContent());
     }
 
     //查询单个订单
@@ -69,7 +74,7 @@ public class BuyerOrderController {
                                      @RequestParam("orderId") String orderId){
         //TODO 不安全做法
         OrderDTO orderDTO = orderService.findOne(orderId);
-        return new ResultVO(7,"查询单个订单",orderDTO);
+        return ResultVOUtil.success(orderDTO);
     }
 
     //取消订单
@@ -81,8 +86,33 @@ public class BuyerOrderController {
         OrderDTO orderDTO = orderService.findOne(orderId);
 
         orderService.cancel(orderDTO);
-        return new ResultVO(8,"取消订单",orderDTO);
+        return ResultVOUtil.success();
     }
 
     //接单
+    @RequestMapping("/getOrder")
+    public ResultVO pick(@RequestParam("orderId") String orderId,
+                         @RequestParam("pickmanId") String pickmanId){
+        OrderDTO orderDTO = orderService.findOne(orderId);
+
+        OrderDTO result = orderService.pick(orderDTO,pickmanId);
+        if(result == null)return ResultVOUtil.error(-1,"ERROR");//补写异常
+
+        return ResultVOUtil.success(result);
+
+
+    }
+
+    //完成订单
+    @RequestMapping("/finishOrder")
+    public ResultVO finishOrder(@RequestParam("orderId") String orderId){
+        OrderDTO orderDTO = orderService.findOne(orderId);
+        if(orderDTO==null)return ResultVOUtil.error(-1,"ERROR");
+
+        OrderDTO result  = orderService.finish(orderDTO);
+
+        return ResultVOUtil.success(result);
+
+
+    }
 }

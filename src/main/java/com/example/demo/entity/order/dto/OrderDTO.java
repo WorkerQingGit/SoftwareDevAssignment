@@ -1,6 +1,7 @@
 package com.example.demo.entity.order.dto;
 
 import com.example.demo.entity.order.dao.OrderDetail;
+import com.example.demo.enums.DeliverStatusEnums;
 import com.example.demo.enums.OrderStatusEnums;
 import com.example.demo.enums.PayStatusEnums;
 import lombok.Data;
@@ -36,6 +37,11 @@ public class OrderDTO {
     private int payStatus;
 
 
+    //运送状态，初始为未在运送
+    private int deliverStatus = DeliverStatusEnums.DELIVER_NOT_ON_ROAD.getCode();
+
+    //接单人，初始为空
+    private String pickmanOpenid = null;
 
     private List<OrderDetail> orderDetailList;
 }
