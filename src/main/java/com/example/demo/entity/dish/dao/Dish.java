@@ -11,9 +11,9 @@ import java.math.BigDecimal;
 public class Dish {
 
     @Id
-    private Integer dishId;
+    private String dishId;
 
-    private Integer canteenId;
+    private String canteenId;
 
     private String dishName;
 

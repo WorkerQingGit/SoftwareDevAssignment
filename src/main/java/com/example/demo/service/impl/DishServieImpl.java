@@ -18,7 +18,7 @@ public class DishServieImpl implements DishService {
     private DishRepository repository;
 
     @Override
-    public Dish findOne(Integer dishId) {
+    public Dish findOne(String dishId) {
         return repository.getOne(dishId.toString());
     }
 

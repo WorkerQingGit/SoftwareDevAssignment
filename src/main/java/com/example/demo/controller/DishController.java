@@ -27,7 +27,7 @@ public class DishController {
     @Autowired
     private CanteenService canteenService;
 
-    @GetMapping("/getAllCanteen")
+    @RequestMapping("/getAllCanteen")
     public ResultVO getAllCanteen(){
 
         List<Canteen> canteenList = canteenService.findAll();
@@ -40,7 +40,7 @@ public class DishController {
     }
 
     //获取某个餐厅信息
-    @GetMapping("/getCanteen")
+    @RequestMapping("/getCanteen")
     public ResultVO getCanteen(Integer canteenId){
 
         Canteen canteen = canteenService.findOne(canteenId);
@@ -53,7 +53,7 @@ public class DishController {
     }
 
     //获取某个食堂下的所有餐品信息
-    @GetMapping("/getDishCanteen")
+    @RequestMapping("/getDishCanteen")
     public ResultVO getDishByCanteen(Integer canteenId){
 
         Canteen canteen = canteenService.findOne(canteenId);
@@ -63,7 +63,7 @@ public class DishController {
 
         List<DishVO> result = new ArrayList<>();
         for(Dish dish:dishList){
-            if(dish.getCanteenId() == canteenId){
+            if(dish.getCanteenId().equals(canteenId)){
                 DishVO dishVO = new DishVO();
                 BeanUtils.copyProperties(dish,dishVO);
                 result.add(dishVO);
@@ -77,8 +77,8 @@ public class DishController {
     }
 
     //获取特定餐品信息
-    @GetMapping("/getDish")
-    public ResultVO getDish(Integer dishId){
+    @RequestMapping("/getDish")
+    public ResultVO getDish(String dishId){
 
         Dish dish = dishService.findOne(dishId);
 

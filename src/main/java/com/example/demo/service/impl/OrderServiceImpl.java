@@ -1,5 +1,6 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.VO.ResultVO;
 import com.example.demo.entity.order.dao.OrderDetail;
 import com.example.demo.entity.order.dao.OrderMaster;
 import com.example.demo.entity.order.dto.OrderDTO;
@@ -18,6 +19,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
@@ -33,7 +35,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private DishService dishService;
+
     @Override
+    @Transactional
     public OrderDTO create(OrderDTO orderDTO) {
 
         //随机生成订单号
@@ -59,6 +63,7 @@ public class OrderServiceImpl implements OrderService {
 
         //OrderMaster写入数据库
         OrderMaster orderMaster = new OrderMaster();
+        orderDTO.setOrderId(orderId);
         BeanUtils.copyProperties(orderDTO, orderMaster);
         orderMaster.setOrderId(orderId);
         orderMaster.setOrderStatus(OrderStatusEnums.ORDER_NEW.getCode());
@@ -71,7 +76,7 @@ public class OrderServiceImpl implements OrderService {
     public OrderDTO findOne(String orderId) {
 
         OrderMaster orderMaster = orderMasterRepository.getOne(orderId);
-        if(orderId == null) return  null;//补写异常
+        if(orderMaster == null) return  null;//补写异常
 
         List<OrderDetail> orderDetailList = orderDetailRepository.findByOrderId(orderId);
         if(CollectionUtils.isEmpty(orderDetailList))return null;//补写异常
@@ -94,17 +99,71 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public OrderDTO finish(OrderDTO orderDTO) {
-        return null;
+        //判断订单状态
+        if(orderDTO.getOrderStatus()!=OrderStatusEnums.ORDER_NEW.getCode()){
+            return null;//补写异常
+        }
+
+        // 修改状态
+        orderDTO.setOrderStatus(OrderStatusEnums.ORDER_FINISHED.getCode());
+        OrderMaster orderMaster = new OrderMaster();
+        BeanUtils.copyProperties(orderDTO,orderMaster);
+        OrderMaster updateResult = orderMasterRepository.save(orderMaster);
+        if(updateResult == null){
+            return null;//补写异常
+        }
+        return orderDTO;
     }
 
     @Override
-    public OrderDTO cancle(OrderDTO orderDTO) {
-        return null;
+    @Transactional
+    public OrderDTO cancel(OrderDTO orderDTO) {
+
+        OrderMaster orderMaster = new OrderMaster();
+
+
+        //判断订单状态
+        if(orderDTO.getOrderStatus() != OrderStatusEnums.ORDER_NEW.getCode()){
+            return null;//补写异常
+        }
+
+        //修改订单状态
+        orderDTO.setOrderStatus(OrderStatusEnums.ORDER_CANCELED.getCode());
+        BeanUtils.copyProperties(orderDTO,orderMaster);
+        OrderMaster updateResult = orderMasterRepository.save(orderMaster);
+        if(updateResult == null)return null;//补写异常
+
+        //返还库存
+
+        //如果已支付，退款
+        if(orderDTO.getPayStatus()==PayStatusEnums.PAY_PAYED.getCode()){
+            //TODO
+        }
+
+        return orderDTO;
     }
 
     @Override
-    public OrderDTO pay(OrderDTO orderDTO) {
-        return null;
+    public OrderDTO paid(OrderDTO orderDTO) {
+        //判断订单状态
+        if(orderDTO.getOrderStatus()!=OrderStatusEnums.ORDER_NEW.getCode()){
+            return null;//补写异常
+        }
+        
+        //判断支付状态
+        if(orderDTO.getPayStatus()!=PayStatusEnums.PAY_NOT_PAY.getCode()){
+            return null;//补写异常
+        }
+        
+        //修改订单状态
+        orderDTO.setPayStatus(PayStatusEnums.PAY_PAYED.getCode());;
+        OrderMaster orderMaster = new OrderMaster();
+        BeanUtils.copyProperties(orderDTO,orderMaster);
+        OrderMaster updateResult = orderMasterRepository.save(orderMaster);
+        if(updateResult == null)return null;//补写异常
+
+        return orderDTO;
     }
 }

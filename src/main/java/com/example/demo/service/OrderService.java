@@ -15,13 +15,15 @@ public interface OrderService {
     //查询订单列表
     Page<OrderDTO> findList(String userId, Pageable pageable);
 
+
+    //修改状态
     //完结订单
     OrderDTO finish(OrderDTO orderDTO);
 
     //取消订单
-    OrderDTO cancle(OrderDTO orderDTO);
+    OrderDTO cancel(OrderDTO orderDTO);
 
     //支付订单
-    OrderDTO pay(OrderDTO orderDTO);
+    OrderDTO paid(OrderDTO orderDTO);
 
 }

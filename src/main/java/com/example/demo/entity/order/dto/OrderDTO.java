@@ -30,10 +30,12 @@ public class OrderDTO {
     private BigDecimal orderAmount;
 
     //    order_status TINYINT (3) NOT NULL DEFAULT '0' COMMENT '订单状态，默认为0',
-    private int orderStatus = OrderStatusEnums.ORDER_NEW.getCode();
+    private int orderStatus;
 
     //    pay_status TINYINT (3) NOT NULL DEFAULT '0' COMMENT '支付状态，默认0是未支付',
-    private int payStatus = PayStatusEnums.PAY_NOT_PAY.getCode();
+    private int payStatus;
+
+
 
     private List<OrderDetail> orderDetailList;
 }

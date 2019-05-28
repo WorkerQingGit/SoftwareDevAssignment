@@ -3,9 +3,11 @@ package com.example.demo.service;
 import com.example.demo.entity.InnerUser;
 import com.example.demo.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Date;
 
+@Service
 public class UserService {
 
     @Autowired

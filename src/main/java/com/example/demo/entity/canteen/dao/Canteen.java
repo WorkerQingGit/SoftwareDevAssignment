@@ -11,11 +11,11 @@ import javax.persistence.Id;
 public class Canteen {
 
     @Id
-    private Integer canteenId;
+    private String canteenId;
 
     private String canteenName;
 
-    public Canteen(Integer canteenId, String canteenName) {
+    public Canteen(String canteenId, String canteenName) {
         this.canteenId = canteenId;
         this.canteenName = canteenName;
     }
