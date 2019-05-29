@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-public class BuyerOrderController {
+public class OrderController {
     @Autowired
     private OrderService orderService;
 
@@ -114,5 +114,41 @@ public class BuyerOrderController {
         return ResultVOUtil.success(result);
 
 
+    }
+
+    //返回未接受的订单，参数openid
+    @RequestMapping("/notAccepted")
+    public ResultVO<List<OrderDTO>> notAccept(@RequestParam("openId") String openId,
+                              @RequestParam(value = "page",defaultValue = "0") Integer page,
+                              @RequestParam(value = "size", defaultValue = "10") Integer size){
+        PageRequest pageRequest = new PageRequest(page,size);
+        Page<OrderDTO> orderDTOPage = orderService.findNotDeliver(openId,pageRequest);
+        if(orderDTOPage == null) return ResultVOUtil.error(-1,"ERROR");
+
+        return ResultVOUtil.success(orderDTOPage);
+    }
+
+    //返回派送中的订单，参数openID
+    @RequestMapping("/delivering")
+    public ResultVO<List<OrderDTO>> delivering(@RequestParam("openId") String openId,
+                                               @RequestParam(value = "page",defaultValue = "0") Integer page,
+                                               @RequestParam(value = "size", defaultValue = "10") Integer size){
+        PageRequest pageRequest = new PageRequest(page,size);
+        Page<OrderDTO> orderDTOPage = orderService.findDelivering(openId,pageRequest);
+        if(orderDTOPage==null)return ResultVOUtil.error(-1,"ERROR");
+
+        return ResultVOUtil.success(orderDTOPage);
+    }
+
+    //已完成的订单，参数openID
+    @RequestMapping("/finished")
+    public ResultVO<List<OrderDTO>> finished(@RequestParam("openId") String openId,
+                                             @RequestParam(value = "page",defaultValue = "0") Integer page,
+                                             @RequestParam(value = "size", defaultValue = "10") Integer size){
+        PageRequest pageRequest = new PageRequest(page,size);
+        Page<OrderDTO> orderDTOPage = orderService.findFinished(openId,pageRequest);
+        if(orderDTOPage==null)return ResultVOUtil.error(-1,"ERROR");
+
+        return ResultVOUtil.success(orderDTOPage);
     }
 }

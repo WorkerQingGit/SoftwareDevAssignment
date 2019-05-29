@@ -19,6 +19,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -91,12 +92,41 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Page<OrderDTO> findList(String userId, Pageable pageable) {
-        Page<OrderMaster> orderMasterDAOPage = orderMasterRepository.findByUserOpenid(userId,pageable);
+        Page<OrderMaster> orderMasterPage = orderMasterRepository.findByUserOpenid(userId,pageable);
 
-        List<OrderDTO> orderDTOList = OrderMAster2OrderDTOConverter.convert(orderMasterDAOPage);
+        List<OrderDTO> orderDTOList = OrderMAster2OrderDTOConverter.convert(orderMasterPage);
 
-        return new PageImpl<OrderDTO>(orderDTOList,pageable,orderMasterDAOPage.getTotalElements());
+        return new PageImpl<OrderDTO>(orderDTOList,pageable,orderMasterPage.getTotalElements());
 
+    }
+
+    @Override
+    public Page<OrderDTO> findNotDeliver(String userId, Pageable pageable) {
+
+        Page<OrderMaster> orderMasterPage = orderMasterRepository.findByDeliverStatusAndUserOpenid(DeliverStatusEnums.DELIVER_NOT_ON_ROAD.getCode(),userId,pageable);
+
+        List<OrderDTO> orderDTOList = OrderMAster2OrderDTOConverter.convert(orderMasterPage);
+
+        return new PageImpl<OrderDTO>(orderDTOList,pageable,orderMasterPage.getTotalElements());
+
+    }
+
+    @Override
+    public Page<OrderDTO> findDelivering(String userId, Pageable pageable) {
+        Page<OrderMaster> orderMasterPage = orderMasterRepository.findByDeliverStatusAndUserOpenid(DeliverStatusEnums.DELIVER_ON_ROAD.getCode(),userId,pageable);
+
+        List<OrderDTO> orderDTOList = OrderMAster2OrderDTOConverter.convert(orderMasterPage);
+
+        return new PageImpl<OrderDTO>(orderDTOList,pageable,orderMasterPage.getTotalElements());
+    }
+
+    @Override
+    public Page<OrderDTO> findFinished(String userId, Pageable pageable) {
+        Page<OrderMaster> orderMasterPage = orderMasterRepository.findByOrderStatusAndUserOpenid(OrderStatusEnums.ORDER_FINISHED.getCode(),userId,pageable);
+
+        List<OrderDTO> orderDTOList = OrderMAster2OrderDTOConverter.convert(orderMasterPage);
+
+        return new PageImpl<OrderDTO>(orderDTOList,pageable,orderMasterPage.getTotalElements());
     }
 
     @Override

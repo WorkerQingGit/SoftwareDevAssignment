@@ -15,6 +15,15 @@ public interface OrderService {
     //查询订单列表
     Page<OrderDTO> findList(String userId, Pageable pageable);
 
+    //查询未接单
+    Page<OrderDTO> findNotDeliver(String userId,Pageable pageable);
+
+    //查询正在派送总
+    Page<OrderDTO> findDelivering(String userId,Pageable pageable);
+
+    //查询已完成订单
+    Page<OrderDTO> findFinished(String userId,Pageable pageable);
+
 
     //修改状态
     //完结订单
