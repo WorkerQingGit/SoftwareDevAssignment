@@ -7,6 +7,7 @@ import com.example.demo.utils.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,10 +18,10 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 @RequestMapping("/user")
 public class UserController {
-    @Autowired
-    UserService userService;
+    @Autowired(required = false)
+    public UserService userService;
 
-    @RequestMapping("/login")
+    @PostMapping("/login")
     public String Login(HttpServletRequest request,String code) {
         String session = request.getSession().getId();
         RestTemplate restTemplate = new RestTemplate();
@@ -36,16 +37,22 @@ public class UserController {
         return session;
     }
 
-    @RequestMapping("/getUserInfo")
+    @PostMapping("/getUserInfo")
     public InnerUser getUserInfo(HttpServletRequest request,String openid){
         String session = request.getSession().getId();
+        if(Session.decoder(session)!=null){
+            InnerUser user = userService.selectAimUser(openid);
+            return user;
+        }
         //todo: 会话管理
-        InnerUser user = userService.selectAimUser(openid);
-        return user;
+        return null;
     }
-    @RequestMapping("/resetData")
+    @PostMapping("/resetData")
     public InnerUser resetData(HttpServletRequest request,InnerUser user){
         String session = request.getSession().getId();
+        if(Session.decoder(session)!=null){
+
+        }
         //todo: resetData
         return user;
     }

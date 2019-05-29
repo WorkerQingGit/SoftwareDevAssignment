@@ -5,6 +5,9 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import com.example.demo.entity.User;
+import org.apache.ibatis.annotations.Update;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.sql.Date;
 
@@ -29,4 +32,7 @@ public interface UserMapper {
             "FROM user \n" +
             "WHERE user_openid = #{param1};")
     InnerUser selectAimUser(String openid);
+
+    @Update("")
+    Integer updateUserInfo(InnerUser user);
 }
