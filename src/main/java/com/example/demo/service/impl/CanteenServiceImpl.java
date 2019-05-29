@@ -7,6 +7,7 @@ import com.example.demo.service.CanteenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -16,8 +17,8 @@ public class CanteenServiceImpl implements CanteenService {
     private CanteenRepository repository;
 
     @Override
-    public Canteen findOne(Integer canteenId) {
-        return repository.getOne(canteenId);
+    public Canteen findOne(String canteenId) {
+        return repository.getOne(Integer.valueOf(canteenId));
     }
 
     @Override
@@ -26,7 +27,7 @@ public class CanteenServiceImpl implements CanteenService {
     }
 
     @Override
-    public List<Canteen> findByCanteenId(List<Integer> canteenIdList) {
+    public List<Canteen> findByCanteenId(List<String> canteenIdList) {
         return repository.findByCanteenId(canteenIdList);
     }
 

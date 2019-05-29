@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface CanteenRepository extends JpaRepository<Canteen,Integer> {
 
-    List<Canteen> findByCanteenId(List<Integer> CanteenId);
+    List<Canteen> findByCanteenId(List<String> CanteenId);
 }
