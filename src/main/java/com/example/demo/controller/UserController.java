@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.entity.InnerUser;
 import com.example.demo.entity.User;
 import com.example.demo.service.UserService;
+import com.example.demo.utils.Date;
 import com.example.demo.utils.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -36,16 +37,20 @@ public class UserController {
         //生成session并返回
         return session;
     }
-
+    @PostMapping("/test")
+    public InnerUser test(HttpServletRequest request){
+        InnerUser user = userService.selectAimUser("001");
+        user.setUserDateString(Date.dateFormat.format(user.getUserDate()));
+        return user;
+    }
     @PostMapping("/getUserInfo")
     public InnerUser getUserInfo(HttpServletRequest request,String openid){
         String session = request.getSession().getId();
-        if(Session.decoder(session)!=null){
-            InnerUser user = userService.selectAimUser(openid);
-            return user;
-        }
+        InnerUser user = userService.selectAimUser(openid);
+        if(user!=null)
+            user.setUserDateString(Date.dateFormat.format(user.getUserDate()));
+        return user;
         //todo: 会话管理
-        return null;
     }
     @PostMapping("/resetData")
     public InnerUser resetData(HttpServletRequest request,InnerUser user){
