@@ -24,18 +24,19 @@ public class UserController {
 
     @PostMapping("/login")
     public String Login(HttpServletRequest request,String code) {
-        String session = request.getSession().getId();
-        RestTemplate restTemplate = new RestTemplate();
-        String url = "https://api.weixin.qq.com/sns/jscode2session?appid=wx2d79b0e37d694e20&secret=5b0b5f8e8299b8596d94b4a643cb04a1&js_code="+code+"&grant_type=authorization_code";
-        String response = restTemplate.getForObject(url,String.class);
-        ResponseEntity<User> userResponse = restTemplate.getForEntity(url,User.class);
-        User user = userResponse.getBody();
-        userService.checkUser(user.getOpenid());
-        session = Session.addUser(user.getOpenid());
-        //检测openid是否存在
-        //首次登录则向数据库中写入openid
-        //生成session并返回
-        return session;
+        String session;
+        User user = userService.login(code);
+        if(user.getOpenid()!=null){
+            userService.checkUser(user.getOpenid());
+            session = Session.addUser(user.getOpenid());
+            //检测openid是否存在
+            //首次登录则向数据库中写入openid
+            //生成session并返回
+            return session;
+        }
+        else{
+            return null;
+        }
     }
     @PostMapping("/test")
     public InnerUser test(HttpServletRequest request){
