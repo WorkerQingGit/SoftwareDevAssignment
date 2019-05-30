@@ -4,9 +4,12 @@ import com.example.demo.entity.order.dao.OrderDetail;
 import com.example.demo.enums.DeliverStatusEnums;
 import com.example.demo.enums.OrderStatusEnums;
 import com.example.demo.enums.PayStatusEnums;
+import com.example.demo.utils.serializer.Date2LongSerializer;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -35,6 +38,13 @@ public class OrderDTO {
 
     //    pay_status TINYINT (3) NOT NULL DEFAULT '0' COMMENT '支付状态，默认0是未支付',
     private int payStatus;
+
+    //创建时间
+    @JsonSerialize(using = Date2LongSerializer.class)
+    private Date createTime;
+
+    @JsonSerialize(using = Date2LongSerializer.class)
+    private Date updateTime;
 
 
     //运送状态，初始为未在运送

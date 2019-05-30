@@ -4,13 +4,16 @@ import com.example.demo.enums.DeliverStatusEnums;
 import com.example.demo.enums.OrderStatusEnums;
 import com.example.demo.enums.PayStatusEnums;
 import lombok.Data;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.math.BigDecimal;
+import java.util.Date;
 
 @Entity
 @Data
+@DynamicUpdate
 public class OrderMaster {
 
 
@@ -44,5 +47,11 @@ public class OrderMaster {
 
     //接单人，初始为空
     private String pickmanOpenid = null;
+
+    //创建时间
+    private Date createTime;
+
+    //更新时间
+    private Date updateTIme;
 
 }
