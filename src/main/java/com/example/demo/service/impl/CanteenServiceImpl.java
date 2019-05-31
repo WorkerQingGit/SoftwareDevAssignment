@@ -18,7 +18,7 @@ public class CanteenServiceImpl implements CanteenService {
 
     @Override
     public Canteen findOne(String canteenId) {
-        return repository.getOne(Integer.valueOf(canteenId));
+        return repository.getOne(canteenId);
     }
 
     @Override

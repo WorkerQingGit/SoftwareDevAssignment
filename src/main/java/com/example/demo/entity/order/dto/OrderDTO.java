@@ -7,12 +7,14 @@ import com.example.demo.enums.PayStatusEnums;
 import com.example.demo.utils.serializer.Date2LongSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
+import org.hibernate.annotations.Proxy;
 
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
 @Data
+@Proxy(lazy = false)
 public class OrderDTO {
 
     //    order_id VARCHAR (32) NOT NULL,
@@ -51,7 +53,7 @@ public class OrderDTO {
     private int deliverStatus = DeliverStatusEnums.DELIVER_NOT_ON_ROAD.getCode();
 
     //接单人，初始为空
-    private String pickmanOpenid = null;
+    private String pickmanOpenid;
 
     private List<OrderDetail> orderDetailList;
 }

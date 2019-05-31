@@ -5,6 +5,7 @@ import com.example.demo.enums.OrderStatusEnums;
 import com.example.demo.enums.PayStatusEnums;
 import lombok.Data;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.Proxy;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -14,6 +15,7 @@ import java.util.Date;
 @Entity
 @Data
 @DynamicUpdate
+@Proxy(lazy = false)
 public class OrderMaster {
 
 
@@ -46,12 +48,12 @@ public class OrderMaster {
     private int deliverStatus = DeliverStatusEnums.DELIVER_NOT_ON_ROAD.getCode();
 
     //接单人，初始为空
-    private String pickmanOpenid = null;
+    private String pickmanOpenid;
 
     //创建时间
     private Date createTime;
 
     //更新时间
-    private Date updateTIme;
+    private Date updateTime;
 
 }

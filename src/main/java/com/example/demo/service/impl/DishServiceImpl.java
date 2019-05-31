@@ -12,7 +12,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 
 @Service
-public class DishServieImpl implements DishService {
+public class DishServiceImpl implements DishService {
 
     @Autowired
     private DishRepository repository;

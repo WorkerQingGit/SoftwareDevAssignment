@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 
-public interface CanteenRepository extends JpaRepository<Canteen,Integer> {
+public interface CanteenRepository extends JpaRepository<Canteen,String> {
 
     List<Canteen> findByCanteenId(List<String> CanteenId);
 }
