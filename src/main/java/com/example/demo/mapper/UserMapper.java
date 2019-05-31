@@ -28,11 +28,16 @@ public interface UserMapper {
             "user_openid AS openid, \n" +
             "username AS username, \n" +
             "user_date AS userDate, \n" +
-            "user_phone AS userPhone \n" +
+            "user_phone AS userPhone, \n" +
+            "user_address AS address " +
             "FROM user \n" +
-            "WHERE user_openid = #{param1};")
+            "WHERE user_openid=#{param1};")
     InnerUser selectAimUser(String openid);
 
-    @Update("")
+    @Update("UPDATE user SET\n" +
+            "username = #{username}, \n" +
+            "user_phone = #{userPhone}, \n" +
+            "user_address = #{address} \n" +
+            "WHERE user_openid = #{openid}")
     Integer updateUserInfo(InnerUser user);
 }

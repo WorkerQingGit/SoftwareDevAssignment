@@ -23,7 +23,11 @@ public class Session {
         return secret;
     }
     public static String decoder(String secret){
-        String openid = session.get(secret);
-        return openid;
+        if(session.get(secret)==null){
+            return null;
+        }
+        else{
+            return session.get(secret);
+        }
     }
 }
