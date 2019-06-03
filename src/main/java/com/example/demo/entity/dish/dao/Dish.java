@@ -15,6 +15,8 @@ public class Dish {
 
     private String canteenId;
 
+    private String sortId;
+
     private String dishName;
 
     private String dishDescription;
