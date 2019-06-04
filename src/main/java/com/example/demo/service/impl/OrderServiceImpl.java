@@ -96,6 +96,17 @@ public class OrderServiceImpl implements OrderService {
         Page<OrderMaster> orderMasterPage = orderMasterRepository.findByUserOpenid(userId,pageable);
 
         List<OrderDTO> orderDTOList = OrderMAster2OrderDTOConverter.convert(orderMasterPage);
+        for(OrderDTO orderDTO:orderDTOList){
+            List<OrderDetail> orderDetailList = orderDetailRepository.findByOrderId(orderDTO.getOrderId());
+            //得到索引
+            Integer index = orderDTOList.indexOf(orderDTO);
+
+            orderDTO.setOrderDetailList(orderDetailList);
+
+            //设置原List
+            orderDTOList.set(index,orderDTO);
+
+        }
 
         return new PageImpl<OrderDTO>(orderDTOList,pageable,orderMasterPage.getTotalElements());
 
@@ -107,6 +118,17 @@ public class OrderServiceImpl implements OrderService {
         Page<OrderMaster> orderMasterPage = orderMasterRepository.findByDeliverStatusAndUserOpenid(DeliverStatusEnums.DELIVER_NOT_ON_ROAD.getCode(),userId,pageable);
 
         List<OrderDTO> orderDTOList = OrderMAster2OrderDTOConverter.convert(orderMasterPage);
+        for(OrderDTO orderDTO:orderDTOList){
+            List<OrderDetail> orderDetailList = orderDetailRepository.findByOrderId(orderDTO.getOrderId());
+            //得到索引
+            Integer index = orderDTOList.indexOf(orderDTO);
+
+            orderDTO.setOrderDetailList(orderDetailList);
+
+            //设置原List
+            orderDTOList.set(index,orderDTO);
+
+        }
 
         return new PageImpl<OrderDTO>(orderDTOList,pageable,orderMasterPage.getTotalElements());
 
@@ -117,6 +139,17 @@ public class OrderServiceImpl implements OrderService {
         Page<OrderMaster> orderMasterPage = orderMasterRepository.findByDeliverStatusAndUserOpenid(DeliverStatusEnums.DELIVER_ON_ROAD.getCode(),userId,pageable);
 
         List<OrderDTO> orderDTOList = OrderMAster2OrderDTOConverter.convert(orderMasterPage);
+        for(OrderDTO orderDTO:orderDTOList){
+            List<OrderDetail> orderDetailList = orderDetailRepository.findByOrderId(orderDTO.getOrderId());
+            //得到索引
+            Integer index = orderDTOList.indexOf(orderDTO);
+
+            orderDTO.setOrderDetailList(orderDetailList);
+
+            //设置原List
+            orderDTOList.set(index,orderDTO);
+
+        }
 
         return new PageImpl<OrderDTO>(orderDTOList,pageable,orderMasterPage.getTotalElements());
     }
@@ -126,6 +159,17 @@ public class OrderServiceImpl implements OrderService {
         Page<OrderMaster> orderMasterPage = orderMasterRepository.findByOrderStatusAndUserOpenid(OrderStatusEnums.ORDER_FINISHED.getCode(),userId,pageable);
 
         List<OrderDTO> orderDTOList = OrderMAster2OrderDTOConverter.convert(orderMasterPage);
+        for(OrderDTO orderDTO:orderDTOList){
+            List<OrderDetail> orderDetailList = orderDetailRepository.findByOrderId(orderDTO.getOrderId());
+            //得到索引
+            Integer index = orderDTOList.indexOf(orderDTO);
+
+            orderDTO.setOrderDetailList(orderDetailList);
+
+            //设置原List
+            orderDTOList.set(index,orderDTO);
+
+        }
 
         return new PageImpl<OrderDTO>(orderDTOList,pageable,orderMasterPage.getTotalElements());
     }

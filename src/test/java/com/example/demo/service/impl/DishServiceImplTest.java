@@ -64,6 +64,7 @@ public class DishServiceImplTest {
         dish.setDishIcon("http://xxxxxx");
         dish.setDishId("1");
         dish.setDishName("TestDish");
+        dish.setSortId("1");
         dish.setDishPrice(new BigDecimal(10));
         dish.setDishStatus(DishStatusEnums.DISH_ON_SALE.getCode());
 

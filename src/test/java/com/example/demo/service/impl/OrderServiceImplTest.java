@@ -80,6 +80,7 @@ public class OrderServiceImplTest {
     public void findNotDeliver() {
 
         Page<OrderDTO> orderDTOPage = orderService.findNotDeliver(OPENID,new PageRequest(0,2));
+        System.out.println(orderDTOPage.toString());
         Assert.assertNotEquals(orderDTOPage.getTotalElements(),0);
     }
 

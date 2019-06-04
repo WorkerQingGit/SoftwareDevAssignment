@@ -24,7 +24,7 @@ public class GoodListController {
         return ResultVOUtil.success(GoodList);
     }
 
-    @RequestMapping("getDishBySortId")
+    @RequestMapping("/getDishBySortId")
     public ResultVO getDishBySortId(String sortId){
         List<Dish> dishList = service.findDishByGoodList(sortId);
         return ResultVOUtil.success(dishList);
