@@ -18,23 +18,33 @@ public class UserService {
     UserMapper userMapper;
 
     public User login(String code){
+        if(code!=null){
+            code=code.trim();
+        }
         System.out.println(code);
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.getMessageConverters().add(new WxMappingJackson2HttpMessageConverter());
-        String url = "https://api.weixin.qq.com/sns/jscode2session?appid=wx2d79b0e37d694e20&secret=5b0b5f8e8299b8596d94b4a643cb04a1&js_code="+code+"&grant_type=authorization_code";
-        String response = restTemplate.getForObject(url,String.class);
+        String url = "https://api.weixin.qq.com/sns/jscode2session?appid=wxabf83e0d1645986b&secret=059a3beb8a32580d0934113900cf4961&js_code="+code+"&grant_type=authorization_code";
+        System.out.println(url);
         ResponseEntity<User> userResponse = restTemplate.getForEntity(url,User.class);
         User user = userResponse.getBody();
+        System.out.println("openid"+user.getOpenid());
+        System.out.println("errcode"+user.getErrcode());
+        System.out.println("Errmsg"+user.getErrmsg());
         return user;
     }
     public boolean checkUser(String openid)throws RuntimeException {
-        Integer result;
+        System.out.println(openid);
+        Integer result = 0;
         result = userMapper.selectUser(openid);
-        if (result == 1) {
+        System.out.println("1.0");
+        if (result != null) {
             return true;
         }
+        System.out.println("1.1");
         Date date = new Date();
-        Integer createResult = userMapper.createUser(openid, new java.sql.Date(date.getTime()));
+        int createResult = userMapper.createUser(openid, new java.sql.Date(date.getTime()));
+        System.out.println("1.2");
         if(createResult==0){
             throw new RuntimeException("新建用户失败");
         }
@@ -44,6 +54,11 @@ public class UserService {
     public InnerUser selectAimUser(String openid)throws  RuntimeException{
         InnerUser user = userMapper.selectAimUser(openid);
         return user;
+    }
+    public InnerUser updateUserInfo(InnerUser user){
+        userMapper.updateUserInfo(user);
+        InnerUser result = userMapper.selectAimUser(user.getOpenid());
+        return result;
     }
 }
 
