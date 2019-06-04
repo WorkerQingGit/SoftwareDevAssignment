@@ -6,12 +6,14 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import com.example.demo.entity.User;
 import org.apache.ibatis.annotations.Update;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Date;
 
 @Mapper
+@Order(1)
 public interface UserMapper {
     @Select("SELECT 1\n" +
             "FROM user \n" +

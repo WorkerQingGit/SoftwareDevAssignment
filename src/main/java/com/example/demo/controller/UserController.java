@@ -25,10 +25,15 @@ public class UserController {
     @PostMapping("/login")
     public String Login(HttpServletRequest request,String code) {
         String session;
+        System.out.println("start");
         User user = userService.login(code);
+        System.out.println("login");
         if(user.getOpenid()!=null){
+            System.out.println("1");
             userService.checkUser(user.getOpenid());
+            System.out.println("2");
             session = Session.addUser(user.getOpenid());
+            System.out.println("3");
             //检测openid是否存在
             //首次登录则向数据库中写入openid
             //生成session并返回
@@ -46,20 +51,15 @@ public class UserController {
     }
     @PostMapping("/getUserInfo")
     public InnerUser getUserInfo(HttpServletRequest request,String openid){
-        String session = request.getSession().getId();
         InnerUser user = userService.selectAimUser(openid);
         if(user!=null)
             user.setUserDateString(Date.dateFormat.format(user.getUserDate()));
         return user;
-        //todo: 会话管理
     }
     @PostMapping("/resetData")
     public InnerUser resetData(HttpServletRequest request,InnerUser user){
-        String session = request.getSession().getId();
-        if(Session.decoder(session)!=null){
-
-        }
-        //todo: resetData
+        userService.updateUserInfo(user);
         return user;
     }
+
 }
