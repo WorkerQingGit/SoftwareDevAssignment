@@ -30,7 +30,7 @@ public class OrderController {
 
     //创建订单
     @RequestMapping("/order")
-    public ResultVO<Map<String ,String>> create(String openId,
+    public ResultVO create(String openId,
                                                 String[] dishid,
                                                 String[] dishnum){
 
