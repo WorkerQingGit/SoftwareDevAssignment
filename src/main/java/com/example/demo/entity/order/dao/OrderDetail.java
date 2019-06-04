@@ -2,6 +2,7 @@ package com.example.demo.entity.order.dao;
 
 import lombok.Data;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.Proxy;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -11,6 +12,7 @@ import java.util.Date;
 @Entity
 @Data
 @DynamicUpdate
+@Proxy(lazy = false)
 public class OrderDetail {
 
 //    detail_id VARCHAR (32) NOT NULL,

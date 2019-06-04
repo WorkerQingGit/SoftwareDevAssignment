@@ -1,14 +1,12 @@
 package com.example.demo.controller;
 
 import com.example.demo.VO.ResultVO;
-import com.example.demo.entity.order.dao.OrderMaster;
+import com.example.demo.entity.order.dao.OrderDetail;
 import com.example.demo.entity.order.dto.OrderDTO;
-import com.example.demo.enums.OrderStatusEnums;
-import com.example.demo.form.OrderForm;
+import com.example.demo.service.DishService;
 import com.example.demo.service.OrderService;
-import com.example.demo.utils.OrderForm2OrderDTOConverter;
+import com.example.demo.utils.KeyUtils;
 import com.example.demo.utils.ResultVOUtil;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,37 +17,50 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
-import javax.xml.transform.Result;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.math.BigDecimal;
+import java.util.*;
 
 @RestController
 public class OrderController {
     @Autowired
     private OrderService orderService;
 
+    @Autowired
+    private DishService dishService;
+
     //创建订单
     @RequestMapping("/order")
-    public ResultVO<Map<String ,String>> create(@Valid OrderForm orderForm,
-                                                BindingResult bindingResult){
+    public ResultVO<Map<String ,String>> create(String openId,
+                                                String[] dishid,
+                                                String[] dishnum){
 
-        if(bindingResult.hasErrors()){
-            return ResultVOUtil.error(-1,"ERROR");//补写错误信息
+
+
+        OrderDTO orderDTO = new OrderDTO();
+        orderDTO.setUserOpenid(openId);
+        List<OrderDetail> orderDetailList = new ArrayList<OrderDetail>();
+        for(int i = 0 ; i < dishid.length ; i++){
+            OrderDetail orderDetail = new OrderDetail();
+            orderDetail.setDetailId(KeyUtils.genUniqueKey());
+            orderDetail.setDishId(dishid[i]);
+            orderDetail.setDishQuantity(Integer.valueOf(dishnum[i]));
+            orderDetail.setDishPrice(dishService.findOne(dishid[i]).getDishPrice());
+            orderDetailList.add(orderDetail);
         }
-
-        OrderDTO orderDTO = OrderForm2OrderDTOConverter.convert(orderForm);
+        orderDTO.setOrderDetailList(orderDetailList);
         if(CollectionUtils.isEmpty(orderDTO.getOrderDetailList())){
             return ResultVOUtil.error(-1,"ERROR");//补写错误
         }
 
+
+
         OrderDTO createResult = orderService.create(orderDTO);
+        createResult.setOrderDetailList(orderDetailList);
 
-        Map<String ,String> map = new HashMap<>();
-        map.put("orderId",createResult.getOrderId());
+//        Map<String ,String> map = new HashMap<>();
+//        map.put("orderId",createResult.getOrderId());
 
-        return ResultVOUtil.success(map);
+        return ResultVOUtil.success(createResult);
 
     }
 
